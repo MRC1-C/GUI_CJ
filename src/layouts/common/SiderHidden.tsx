@@ -3,12 +3,13 @@ import { Drawer, Layout, MenuProps, Button } from 'antd';
 import { Menu } from 'antd';
 import { RouteType } from "@/routes /config";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useNavigate } from 'react-router-dom';
 import logo from '@/assets/logo.png'
 import './SiderHidden.css'
 import { MenuUnfoldOutlined } from "@ant-design/icons";
+import { setOpenSibar } from "@/store/features/appStateSlice";
 type MenuItem = Required<MenuProps>['items'][number];
 const { Sider } = Layout;
 
@@ -36,23 +37,18 @@ const getItem = (items: RouteType[]): MenuItem[] => {
 }
 
 const SiderHidden = () => {
-    const { appState } = useSelector((state: RootState) => state.appState);
+    const { appState, openSibar } = useSelector((state: RootState) => (state.appState));
     const [open, setOpen] = useState<string[]>()
-    const [openDrawer, setOpenDrawer] = useState<boolean>(false)
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     return (
         <div>
-            <div className="fixed top-1 left-1 z-50">
-                <Button onClick={() => setOpenDrawer(true)}>
-                    <MenuUnfoldOutlined />
-                </Button>
-            </div>
             <Drawer
                 className="m-0 p-0"
                 placement={'left'}
                 closable={false}
-                onClose={() => setOpenDrawer(false)}
-                open={openDrawer}
+                onClose={() => dispatch(setOpenSibar(false))}
+                open={openSibar}
                 width={200}
             >
                 {/* <Sider collapsible> */}
